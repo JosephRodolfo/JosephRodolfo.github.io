@@ -1,4 +1,7 @@
+body {
 
+  width: 100%;
+}
 :root {
     --grid-cols: 1;
     --grid-rows: 1;
