@@ -42,7 +42,7 @@ body {
 
   #keyboard-container {
 
-    width: 700px;
+    width: 100%;
     height: 250px;
     background-color: lightsteelblue;
     display: flex;
