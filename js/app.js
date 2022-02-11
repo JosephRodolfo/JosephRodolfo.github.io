@@ -207,7 +207,7 @@ function checkForWin(wordLength) {
     }
     if (score === wordLength) {
       let displayScore = scoreKeeper.row;
-      alert("you win in " + displayScore);
+      alert("you win in " + displayScore + ". The word was " + scoreKeeper.theWordleWord);
 
       return true;
     }
