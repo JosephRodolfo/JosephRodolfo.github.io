@@ -1,12 +1,14 @@
-const container = document.getElementById("container");
+//import { validateGuess } from '/js/validation.js';
+//import { validateNumberInput } from '/js/validation.js';
+
+const container = document.getElementById("grid-board");
 let numberOfLetters = document.getElementById("number-of-letters");
 let drawBoardButton = document.getElementById("button-draw-board");
 const once = {
   once: true,
 };
-let mainButton = document.getElementById("button-main");
-drawBoardButton.addEventListener("click", startGame, once);
-
+let mainButton = document.getElementById("button-guess");
+//drawBoardButton.addEventListener("click", startGame, once);
 //Scorekeeper Object: keeps track of score, current row, guess word and the word you need
 // to figure out.
 
@@ -18,13 +20,15 @@ let scoreKeeper = {
   numberOfLettersInWord: 0,
 };
 
+startGame();
+
 //Draws board, lets you choose size
 
 function drawBoard(rows, cols) {
   container.style.setProperty("--grid-rows", rows);
   container.style.setProperty("--grid-cols", cols);
-  for (c = 0; c < rows; c++) {
-    for (i = 0; i < cols; i++) {
+  for (let c = 0; c < rows; c++) {
+    for (let i = 0; i < cols; i++) {
       let cell = document.createElement("div");
       cell.id = "b" + (c + 1) + "" + (i + 1);
       //     cell.innerText = "b" + (c + 1) + "" + (i + 1);
@@ -37,9 +41,8 @@ function drawBoard(rows, cols) {
 //startGame begins when you click submit on number of columns (letters),
 //draws board and kicks off main game flow;
 function startGame() {
-  drawBoard(6, numberOfLetters.value);
-  scoreKeeper.numberOfLettersInWord = numberOfLetters.value;
-
+  drawBoard(6, 5); // numberOfLetters.value); //
+  scoreKeeper.numberOfLettersInWord = 5; //numberOfLetters.value;
   mainGame();
 }
 
@@ -52,9 +55,9 @@ function updateBoard(updaterInputArray, row) {
     let squareId = "#b" + row.toString() + "" + firstChar;
     let tempSquare = document.querySelector(squareId);
     if (updaterInputArray[i].toString().slice(-1) == 6) {
-      tempSquare.style.backgroundColor = "yellow";
+      tempSquare.style.setProperty("background-color", "var(--lightThemeRed)");
     } else if (updaterInputArray[i].toString().slice(-1) == 5) {
-      tempSquare.style.backgroundColor = "green";
+      tempSquare.style.setProperty("background-color", "var(--lightThemeBlue)");
     }
   }
 }
@@ -71,8 +74,22 @@ function updateKeyboard(updaterInputArray, theGuessWord, theWordleWord) {
     let missLetters = [...new Set(output)];
 
     for (let i = 0; i < missLetters.length; i++) {
-      let tempSquare = document.querySelector("#key-" + missLetters[i]);
-      tempSquare.style.backgroundColor = "rgb(93,93,93)";
+      let tempSquare = document.querySelectorAll(
+        ".key-" + missLetters[i] + ", .key-" + missLetters[i] + ">*"
+      );
+
+      tempSquare[0].style.setProperty(
+        "background-color",
+        "var(--lightThemeGray)"
+      );
+      tempSquare[1].style.setProperty(
+        "background-color",
+        "var(--lightThemeGray)"
+      );
+      tempSquare[2].style.setProperty(
+        "background-color",
+        "var(--lightThemeGray)"
+      );
     }
   }
 
@@ -81,17 +98,50 @@ function updateKeyboard(updaterInputArray, theGuessWord, theWordleWord) {
 
     allButLast--;
 
-    let keyLight = "#key-" + theGuessWord[allButLast];
+    let keyLight = ".key-" + theGuessWord[allButLast];
 
-    let tempSquare = document.querySelector(keyLight);
+    let tempSquare = document.querySelectorAll(keyLight);
     if (updaterInputArray[i].toString().slice(-1) == 6) {
-      if (tempSquare.style.backgroundColor == "green") {
-        tempSquare.style.backgroundColor = "green";
+      if (tempSquare[0].style.backgroundColor == "--lightThemeBlue") {
+        tempSquare[0].style.setProperty(
+          "background-color",
+          "var(--lightThemeBlue)"
+        );
+        tempSquare[1].style.setProperty(
+          "background-color",
+          "var(--lightThemeBlue)"
+        );
+        tempSquare[2].style.setProperty(
+          "background-color",
+          "var(--lightThemeBlue)"
+        );
       } else {
-        tempSquare.style.backgroundColor = "yellow";
+        tempSquare[0].style.setProperty(
+          "background-color",
+          "var(--lightThemeRed)"
+        );
+        tempSquare[1].style.setProperty(
+          "background-color",
+          "var(--lightThemeRed)"
+        );
+        tempSquare[2].style.setProperty(
+          "background-color",
+          "var(--lightThemeRed)"
+        );
       }
     } else if (updaterInputArray[i].toString().slice(-1) == 5) {
-      tempSquare.style.backgroundColor = "green";
+      tempSquare[0].style.setProperty(
+        "background-color",
+        "var(--lightThemeBlue)"
+      );
+      tempSquare[1].style.setProperty(
+        "background-color",
+        "var(--lightThemeBlue)"
+      );
+      tempSquare[2].style.setProperty(
+        "background-color",
+        "var(--lightThemeBlue)"
+      );
     }
   }
 }
@@ -126,9 +176,10 @@ function findIndex(theWordleWord, theGuessWord) {
 
 //Inserts guess letters into the HTML, takes input word array.
 function placeLetters(inputWord) {
+  getResponsiveFontSize();
+
   for (let i = 0; i < inputWord.length; i++) {
     let squareId = "#b" + scoreKeeper.row + "" + (i + 1);
-    //  console.log(squareId);
     let tempLetterSquare = document.querySelector(squareId);
 
     tempLetterSquare.innerText = inputWord[i];
@@ -174,6 +225,7 @@ function mainGame(resetHelper) {
       var theWord = scoreKeeper.theWordleWord.split("");
       scoreKeeper.row++;
       let wordGuess = document.getElementById("word-guess");
+
       let holder = wordGuess.value;
       scoreKeeper.theGuess = holder.split("");
       updateBoard(findIndex(theWord, scoreKeeper.theGuess), scoreKeeper.row);
@@ -184,11 +236,15 @@ function mainGame(resetHelper) {
       );
       placeLetters(scoreKeeper.theGuess);
       if (checkForWin(theWord.length)) {
-        resetGame();
+        //resetGame();
+        overlayAlert("You won in " + scoreKeeper.row, resetGame());
       }
-      if (checkForLoss(scoreKeeper.row)){
-        resetGame();
-
+      if (checkForLoss(scoreKeeper.row)) {
+        //  resetGame();
+        overlayAlert(
+          "You lost! The word was " + scoreKeeper.theWordleWord,
+          resetGame()
+        );
       }
     }
   }
@@ -202,12 +258,15 @@ function checkForWin(wordLength) {
   for (let i = 0; i < wordLength; i++) {
     let squareId = "#b" + scoreKeeper.row.toString() + "" + (i + 1);
     let tempSquare = document.querySelector(squareId);
-    if (tempSquare.style.backgroundColor === "green") {
+    if (tempSquare.style.backgroundColor === "var(--lightThemeBlue)") {
       score++;
     }
     if (score === wordLength) {
       let displayScore = scoreKeeper.row;
-      alert("you win in " + displayScore + ". The word was " + scoreKeeper.theWordleWord);
+
+      overlayAlert("you win in " + displayScore);
+
+      //  alert("you win in " + displayScore);
 
       return true;
     }
@@ -216,34 +275,188 @@ function checkForWin(wordLength) {
 
 function checkForLoss(row) {
   if (row == 6) {
-    alert("You lost");
+    //  alert("You lost. The answer was " + scoreKeeper.theWordleWord + ".");
     return true;
-    }
+  }
 }
 
-//Resets game. Turns row back to 0, clears css on board and letters from guesses
+//Resets game. Turns row back to 0, deletes grid-board html and redraws board. If statement
+//determines whether or not you've entered a new number of letters, if not keeps old number.
 //resets scorekeepers data. Passes 1 to mainGame() which indicates to remove event listener
 
-function resetGame() {
-  scoreKeeper.row = 0;
-
-  resetBoardHtml();
-  function resetBoardHtml() {
-    let lettersList = document.querySelectorAll(".grid-item");
-    lettersList.forEach((element) => {
-      element.style.backgroundColor = "lightblue";
-      element.innerText = "";
-    });
+function resetGame(columns) {
+  container.innerHTML = "";
+  if (typeof columns == "undefined") {
+    drawBoard(6, scoreKeeper.numberOfLettersInWord);
+  } else {
+    scoreKeeper.numberOfLettersInWord = columns;
+    drawBoard(6, columns);
   }
+  scoreKeeper.row = 0;
   scoreKeeper.theWordleWord = "";
   resetKeyboard();
   mainGame(1);
 
   function resetKeyboard() {
-    let keyElements = document.querySelectorAll(".keyboard-letters");
+    let keyElements = document.querySelectorAll(
+      ".keyboard-letters, #all-letters-container >.flex-circle, #all-letters-container >.flex-circle>*"
+    );
 
     keyElements.forEach((element) => {
-      element.style.backgroundColor = "lightgray";
+      element.style.backgroundColor = "var(--lightThemeBlack)";
     });
   }
+}
+//Resizes grid-items font-size to be responsive.
+//Need to update with ability to change column/letter changes
+
+function getResponsiveFontSize() {
+  let gridBoardWidthVar = document.querySelector("#grid-board");
+  let width = gridBoardWidthVar.clientWidth;
+
+  let value = (width / scoreKeeper.numberOfLettersInWord) * 0.65;
+
+  let gridItems = document.querySelectorAll("#grid-board > *");
+
+  gridItems.forEach((element) =>
+    element.style.setProperty("font-size", value + "px")
+  );
+}
+
+window.addEventListener("resize", getResponsiveFontSize);
+
+mobileNavControl();
+function mobileNavControl() {
+  let mobileMenuButton = document.querySelector("nav>ul>li:nth-child(5)");
+  mobileMenuButton.addEventListener("click", openMobileNav);
+
+  let closeMobileMenuButton = document.querySelector(".close-overlay");
+  closeMobileMenuButton.addEventListener("click", closeMobileNav);
+
+  function openMobileNav() {
+    let overlay = document.querySelector(".overlay");
+
+    overlay.style.setProperty("width", "100%");
+  }
+
+  function closeMobileNav() {
+    let overlay = document.querySelector(".overlay");
+    overlay.style.setProperty("width", "0%");
+  }
+}
+
+mobileInstructionsToggle();
+function mobileInstructionsToggle() {
+  let instructionsButton = document.querySelector(".instructions-mobile");
+
+  instructionsButton.addEventListener("click", revealInstructions);
+  let closeInstructions = document.querySelector(".close-instructions");
+
+  closeInstructions.addEventListener("click", closeInstructionsFunc);
+  let aside = document.querySelector("#instructions");
+
+  function revealInstructions() {
+    let gridBodyWrapper = document.getElementById("grid-body-wrapper");
+    aside.style.setProperty("display", "flex");
+    aside.style.setProperty("z-index", "99");
+    aside.style.setProperty("position", "absolute");
+    aside.style.setProperty("height", "100vh");
+    aside.style.setProperty("width", "100%");
+  }
+
+  function closeInstructionsFunc() {
+    aside.style.setProperty("display", "initial");
+    aside.style.setProperty("z-index", "auto");
+
+    aside.style.setProperty("position", "relative");
+  }
+}
+
+function validateNumberInput1() {
+  let inpObj = document.querySelector(".change-number-input1");
+  if (!inpObj.checkValidity()) {
+    alert("Enter a number 3 to 15!");
+  } else {
+    resetGame(inpObj.value);
+  }
+}
+
+function validateNumberInput2() {
+  let inpObj = document.querySelector(".change-number-input2");
+  if (!inpObj.checkValidity()) {
+    alert("Enter a number 3 to 15!");
+  } else {
+    resetGame(inpObj.value);
+  }
+}
+
+darkThemeToggle();
+
+function darkThemeToggle() {
+  var root = document.querySelector(":root");
+
+  let toggleSwitches = document.querySelectorAll(".dark-mode-toggle");
+  toggleSwitches.forEach((element) =>
+    element.addEventListener("change", turnOnOrOffDarkMode)
+  );
+  function turnOnOrOffDarkMode() {
+    if (this.id == "toggle1") {
+      toggleSwitches[1].checked = toggleSwitches[0].checked;
+    } else if (this.id == "toggle2") {
+      toggleSwitches[0].checked = toggleSwitches[1].checked;
+    }
+
+    if (toggleSwitches[0].checked) {
+      root.style.setProperty("--lightThemeBlue", "#245262");
+      root.style.setProperty("--lightThemeGray", "");
+      root.style.setProperty("--lightThemeRed", "#6600ff");
+      root.style.setProperty("--lightThemeBlack", "white");
+      root.style.setProperty("--lightThemeBackground", "#18191A");
+      root.style.setProperty("--lightThemeDropDown", "#f2f2f2");
+    } else {
+      root.style.setProperty("--lightThemeBlue", "rgb(57, 126, 135)");
+      root.style.setProperty("--lightThemeGray", "rgb(94, 94, 94)");
+      root.style.setProperty("--lightThemeRed", "rgb(231, 150, 150)");
+      root.style.setProperty("--lightThemeBlack", "black");
+      root.style.setProperty("--lightThemeBackground", "#f7f7f7");
+      root.style.setProperty("--lightThemeDropDown", "#f2f2f2");
+    }
+  }
+  //From left to right: background, card, hover color, primary text, secondary text
+}
+
+/*--lightThemeBlue: rgb(57, 126, 135);
+--lightThemeGray: rgb(94, 94, 94)
+--lightThemeRed: rgb(231, 150, 150)
+--lightThemeBlack: black
+--lightThemeBackground: #f7f7f7
+--lightThemeDropDown: #f2f2f2
+*/
+
+function overlayAlert(alertMessage, callbackFunction) {
+  let overlayMessageHolder = document.querySelector(".overlay-alert-card>span");
+
+  overlayMessageHolder.innerText = alertMessage;
+  let overlay = document.querySelector(".overlay-alert-wrapper");
+
+  overlay.style.setProperty("opacity", "100%");
+  overlay.style.setProperty("z-index", "99");
+  const once = {
+    once: true,
+  };
+
+  function resetGameAndResetOverlay() {
+  
+    let overlay = document.querySelector(".overlay-alert-wrapper");
+
+    overlay.style.setProperty("opacity", "0");
+    overlay.style.setProperty("z-index", "-2");
+    callbackFunction;
+  }
+
+  let overlayResetButton = document.querySelector("#close-alert-button");
+  overlayResetButton.addEventListener("click", resetGameAndResetOverlay, once);
+
+
+
 }
