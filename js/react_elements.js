@@ -166,11 +166,11 @@ class KeyBoardContainer extends React.Component {
         scoreKeeper.theGuess = holder.split("");
       
         updateBoard(findIndex(theWord, scoreKeeper.theGuess), scoreKeeper.row);
-     /*  updateKeyboard(
+       updateKeyboard(
           findIndex(theWord, scoreKeeper.theGuess),
           scoreKeeper.theGuess,
           theWord
-        );*/
+        );
         placeLetters(scoreKeeper.theGuess);
         if (checkForWin(theWord.length)) {
           //resetGame();
