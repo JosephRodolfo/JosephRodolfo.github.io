@@ -8,7 +8,7 @@ const once = {
   once: true,
 };
 let mainButton = document.getElementById("button-guess");
-let wordGuessInput = document.getElementById("word-guess");
+//let wordGuessInput = document.getElementById("word-guess");
 //drawBoardButton.addEventListener("click", startGame, once);
 //Scorekeeper Object: keeps track of score, current row, guess word and the word you need
 // to figure out.
@@ -75,12 +75,12 @@ function updateKeyboard(updaterInputArray, theGuessWord, theWordleWord) {
       return theWordleWord.indexOf(obj) == -1;
     });
     let missLetters = [...new Set(output)];
-
+console.log(missLetters);
     for (let i = 0; i < missLetters.length; i++) {
       let tempSquare = document.querySelectorAll(
-        ".key-" + missLetters[i] + ", .key-" + missLetters[i] + ">*"
+        `.key-${missLetters[i]}, .key-${missLetters[i]}>*`
       );
-
+console.log(document.querySelector(".key-b"));
       tempSquare[0].style.setProperty(
         "background-color",
         "var(--lightThemeGray)"
@@ -180,11 +180,9 @@ function findIndex(theWordleWord, theGuessWord) {
 //Inserts guess letters into the HTML, takes input word array.
 function placeLetters(inputWord) {
   getResponsiveFontSize();
-
   for (let i = 0; i < inputWord.length; i++) {
     let squareId = "#b" + scoreKeeper.row + "" + (i + 1);
     let tempLetterSquare = document.querySelector(squareId);
-
     tempLetterSquare.innerText = inputWord[i];
   }
 }
@@ -219,13 +217,12 @@ function mainGame(resetHelper) {
       scoreKeeper.numberOfLettersInWord
     );
 //Creates event listeners for text input (enter button only) and submit button
-    if (resetHelper !==1) {
+  /*  if (resetHelper !==1) {
 
-    mainButton.addEventListener("click", myFunction);
-    wordGuessInput.addEventListener("keydown", function(e){
-      console.log("test");
+  //  mainButton.addEventListener("click", myFunction);
+  wordGuessInput.addEventListener("keydown", function(e){
       if(e.key == 'Enter' && scoreKeeper.lockoutFocus==0) {myFunction()}}
- )}
+ )}*/
 
     /*if (resetHelper === 1) {
       mainButton.removeEventListener("click", myFunction);
@@ -235,42 +232,7 @@ function mainGame(resetHelper) {
    ))
     }*/
 
-    function myFunction() {
 
-      let wordGuess = document.getElementById("word-guess");
-      let holder = wordGuess.value;
-      wordGuess.value = "";
-
-if (validateGuess(holder, scoreKeeper.numberOfLettersInWord)) {
-      var theWord = scoreKeeper.theWordleWord.split("");
-      scoreKeeper.row++;
-
-      scoreKeeper.theGuess = holder.split("");
-      updateBoard(findIndex(theWord, scoreKeeper.theGuess), scoreKeeper.row);
-      updateKeyboard(
-        findIndex(theWord, scoreKeeper.theGuess),
-        scoreKeeper.theGuess,
-        theWord
-      );
-      placeLetters(scoreKeeper.theGuess);
-      if (checkForWin(theWord.length)) {
-        //resetGame();
-        overlayAlert("You won in " + scoreKeeper.row, resetGame());
-      }
-      if (checkForLoss(scoreKeeper.row)) {
-        //  resetGame();
-        overlayAlert(
-          "You lost! The word was " + scoreKeeper.theWordleWord,
-          resetGame()
-        );
-      }
-
-    } else {
-
-      return;
-
-    }
-    }
   }
 }
 
@@ -429,11 +391,12 @@ function darkThemeToggle() {
 
     if (toggleSwitches[0].checked) {
       root.style.setProperty("--lightThemeBlue", "#245262");
-      root.style.setProperty("--lightThemeGray", "");
+      root.style.setProperty("--lightThemeGray", "rgb(94, 94, 94)");
       root.style.setProperty("--lightThemeRed", "#6600ff");
       root.style.setProperty("--lightThemeBlack", "white");
       root.style.setProperty("--lightThemeBackground", "#18191A");
       root.style.setProperty("--lightThemeDropDown", "#f2f2f2");
+      root.style.setProperty("--svgFilterSettings", 'invert(100%) sepia(0%) saturate(6%) hue-rotate(182deg) brightness(115%) contrast(94%)')
     } else {
       root.style.setProperty("--lightThemeBlue", "rgb(57, 126, 135)");
       root.style.setProperty("--lightThemeGray", "rgb(94, 94, 94)");
@@ -441,6 +404,8 @@ function darkThemeToggle() {
       root.style.setProperty("--lightThemeBlack", "black");
       root.style.setProperty("--lightThemeBackground", "#f7f7f7");
       root.style.setProperty("--lightThemeDropDown", "#f2f2f2");
+      root.style.setProperty("--svgFilterSettings", 'none')
+
     }
   }
   //From left to right: background, card, hover color, primary text, secondary text
@@ -497,7 +462,7 @@ function validateGuess(guessWord, numberOfLetters) {
   if (alphaOnly(guessWord) && checkLength(guessWord, numberOfLetters)) {
     return true;
   } else {
-    alert("Please ensure your guess comprises only the correct amount of letters and no letters!");
+    alert("Please ensure your guess comprises only the correct amount of letters and no numbers!");
 
     return false;
   }

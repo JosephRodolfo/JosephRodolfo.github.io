@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="styles/site.css" />
 
     <title>Document</title>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script> 
+     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   </head>
   <body>
     <div id="grid-body-wrapper">
       <nav>
         <ul>
           <li class="hamburger-button">
-            <img src="assets/icons8-menu.svg" />
+            <img class="svgImage" src="assets/hamburger.svg" />
             <ul class="dropdown left">
               <li><a href="#test">Home</a></li>
               <li><a href="#test">Games</a></li>
@@ -27,19 +31,19 @@
               <li><a href="#test">About</a></li>
             </ul>
           </li>
-          <li class="title">WORDLE</li>
+          <li class="title" id="wordle-title">WORDLE</li>
           <li class="right">
-            <img src="assets/gear-svgrepo-com.svg" />
+            <img class="svgImage" src="assets/gear.svg" />
             <ul class="dropdown right">
               <li>
-                <div class="dropdown-titles">Letters</div>
+                <div class="dropdown-titles"><span>Letters</span></div>
                 <div class="number-submit-container">
                   <input type="number" class="change-number-input1" min="3" max="15" required/>
                   <button type="submit" class="button reset" onclick="validateNumberInput1()" >Reset</button>
                 </div>
               </li>
               <li>
-                <div class="dropdown-titles">Dark Mode</div>
+                <div class="dropdown-titles"><span>Dark Mode</span></div>
 
                 <label class="switch">
                   <input type="checkbox" id="toggle1" class="dark-mode-toggle" />
@@ -57,47 +61,13 @@
         </section>
 
         <section id="input-container">
-          <input type="text" id="word-guess" />
-          <button type="submit" class="button" id="button-guess">Submit</button>
+          <div id="word-guess-input-container"></div>
         </section>
       </main>
 
       <div id="keyboard">
         <div id="keyboard-container">
-          <div class="keyboard-row">
-            <div class="key-q keyboard-letters">Q</div>
-            <div class="key-w keyboard-letters">W</div>
-            <div class="key-e keyboard-letters">E</div>
-            <div class="key-r keyboard-letters">R</div>
-            <div class="key-t keyboard-letters">T</div>
-            <div class="key-y keyboard-letters">Y</div>
-            <div class="key-u keyboard-letters">U</div>
-            <div class="key-i keyboard-letters">I</div>
-            <div class="key-o keyboard-letters">O</div>
-            <div class="key-p keyboard-letters">P</div>
-          </div>
-          <div class="keyboard-row">
-            <div class="key-a keyboard-letters">A</div>
-            <div class="key-s keyboard-letters">S</div>
-            <div class="key-d keyboard-letters">D</div>
-            <div class="key-f keyboard-letters">F</div>
-            <div class="key-g keyboard-letters">G</div>
-            <div class="key-h keyboard-letters">H</div>
-            <div class="key-j keyboard-letters">J</div>
-            <div class="key-k keyboard-letters">K</div>
-            <div class="key-l keyboard-letters">L</div>
-          </div>
-          <div class="keyboard-row">
-            <div class="key-enter keyboard-letters">Enter</div>
-            <div class="key-z keyboard-letters">Z</div>
-            <div class="key-x keyboard-letters">X</div>
-            <div class="key-c keyboard-letters">C</div>
-            <div class="key-v keyboard-letters">V</div>
-            <div class="key-b keyboard-letters">B</div>
-            <div class="key-n keyboard-letters">N</div>
-            <div class="key-m keyboard-letters">M</div>
-            <div class="key-backspace keyboard-letters">Back</div>
-          </div>
+          
         </div>
         <div id="all-letters-container">
           <div class="key-a flex-circle">
@@ -270,7 +240,7 @@
                 class="flex-inner-circle"
                 style="background-color: var(--lightThemeGray)"
               >
-                W
+                U
               </div>
             </div>
             <div class="flex-circle demo-key">
@@ -289,7 +259,7 @@
             <div class="overlay-labels">Letters</div>
             <div class="number-submit-container">
               <input type="number" class="change-number-input2"  min="3" max="15" required/>
-              <button type="submit" class="button reset" onclick="validateNumberInput2()">Reset</button>
+              <button type="submit" class="button reset" onclick="validateNumberInput2">Reset</button>
             </div>
           </li>
           <li>
@@ -316,7 +286,10 @@
       <button type="submit" class="button" id="close-alert-button">Reset</button>
     </div>
   </div>
+  <div id="like_button_container"></div>
 </html>
 
 <script src="js/app.js"></script>
-<script src="js/validation.js" type="module"></script>
+<script src="js/react_elements.js" type="text/babel"></script>
+
+  <!-- Load our React component. -->
