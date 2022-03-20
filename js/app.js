@@ -75,12 +75,10 @@ function updateKeyboard(updaterInputArray, theGuessWord, theWordleWord) {
       return theWordleWord.indexOf(obj) == -1;
     });
     let missLetters = [...new Set(output)];
-console.log(missLetters);
     for (let i = 0; i < missLetters.length; i++) {
       let tempSquare = document.querySelectorAll(
         `.key-${missLetters[i]}, .key-${missLetters[i]}>*`
       );
-console.log(document.querySelector(".key-b"));
       tempSquare[0].style.setProperty(
         "background-color",
         "var(--lightThemeGray)"
@@ -159,7 +157,7 @@ function findIndex(theWordleWord, theGuessWord) {
   });
 
   function indexOfAll(array, searchItem) {
-    var i = array.indexOf(searchItem);
+    let i = array.indexOf(searchItem);
     while (i !== -1) {
       if (theWordleWord[i] === theGuessWord[i]) {
         matchesArray.push(i + 1 + "" + 5);
@@ -227,7 +225,6 @@ function mainGame(resetHelper) {
     /*if (resetHelper === 1) {
       mainButton.removeEventListener("click", myFunction);
       wordGuessInput.removeEventListener(("keyup", function(e){
-        console.log("test");
         if(e.key == 'Enter') {myFunction()}}, false
    ))
     }*/
@@ -424,7 +421,7 @@ function overlayAlert(alertMessage, callbackFunction) {
 
   let overlayMessageHolder = document.querySelector(".overlay-alert-card>span");
 
-  overlayMessageHolder.innerText = alertMessage;
+  overlayMessageHolder.innerHTML = alertMessage;
   let overlay = document.querySelector(".overlay-alert-wrapper");
 
   overlay.style.setProperty("opacity", "100%");
