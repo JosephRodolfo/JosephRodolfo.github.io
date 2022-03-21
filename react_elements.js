@@ -139,7 +139,6 @@ class KeyBoardContainer extends React.Component {
 
   getCurrentKey(e) {
     navigator.vibrate(200);
-Navigator.vibrate(200);
     if(this.state.array.length<scoreKeeper.theWordleWord.length){
 
 
