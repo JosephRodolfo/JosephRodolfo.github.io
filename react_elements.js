@@ -138,7 +138,15 @@ class KeyBoardContainer extends React.Component {
   }
 
   getCurrentKey(e) {
-    navigator.vibrate(200);
+
+    navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+
+    if (navigator.vibrate) {
+      // vibration API supported
+        navigator.vibrate(1000);
+    }
+
+
     if(this.state.array.length<scoreKeeper.theWordleWord.length){
 
 
