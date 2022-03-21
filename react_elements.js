@@ -138,14 +138,13 @@ class KeyBoardContainer extends React.Component {
   }
 
   getCurrentKey(e) {
-
-
+    navigator.vibrate(200);
+Navigator.vibrate(200);
     if(this.state.array.length<scoreKeeper.theWordleWord.length){
 
 
     if (e.target.innerText.length === 1) {
       getResponsiveFontSize();
-      window.navigator.vibrate(200);
       let t = e.target.innerText;
 
       /* this.setState((prevState)=>{
@@ -162,7 +161,6 @@ class KeyBoardContainer extends React.Component {
     }  } 
 
     if (e.target.innerText== "Back"){
-      window.navigator.vibrate(200);
       this.setState((prevState) => {
         return {
           array: prevState.array.slice(0, -1),
@@ -175,8 +173,8 @@ class KeyBoardContainer extends React.Component {
      if(e.target.innerText=== "Enter")  {
       
 
-      window.navigator.vibrate(200);
 
+    
     /*  let wordGuess = document.getElementById("word-guess");
       let holder = wordGuess.value;
       wordGuess.value = "";*/
